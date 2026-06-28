@@ -1,0 +1,58 @@
+# ============================================
+# VLP-STRAINMETER — .gitignore
+# ============================================
+# Solo i dati e gli output vanno ignorati.
+# Il codice sorgente (~4MB) è tutto tracciato.
+
+# --- Dati grezzi (grandi, non versionare) ---
+data/processed/*.txt
+data/processed/*.npy
+data/processed/*.csv
+data/processed/*.tsv
+data/measured/*.dat
+data/measured/*.csv
+data/measured/*.npy
+
+# --- Output generati (ricomputabili) ---
+outputs/ae1_type1/
+outputs/ae2_type2/
+outputs/discriminator/
+outputs/_smoke_/
+outputs/_smoke_test/
+outputs/classifier_predictions/
+outputs/*.pt
+outputs/*.csv
+outputs/*.json
+outputs/*.png
+outputs/*.html
+
+# --- Notebook output (embeddedsbatti nei .ipynb) ---
+notebooks/outputs/
+notebooks/*.png
+notebooks/*.ipynb_checkpoints/
+
+# --- Python cache ---
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# --- Mac ---
+.DS_Store
+
+# --- Notebook checkpoints ---
+.ipynb_checkpoints/
+
+# --- Word docs (non codice) ---
+*.docx
+~$*
+
+# --- Editor ---
+.vscode/
+.idea/
+*.sublime-*
+
+# --- OS ---
+Thumbs.db

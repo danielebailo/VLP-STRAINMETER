@@ -1,0 +1,111 @@
+# STRAINMETER project configuration — v2.0 Classifier
+# This file controls:
+# - the two training datasets (type1 and type2)
+# - the CNN classifier architecture
+# - the training loop
+# - the measured file used for prediction
+
+project_name: strainmeter_classifier
+project_version: "2.0"
+
+# ---------------------------------------------------------------------------
+# Data section
+# ---------------------------------------------------------------------------
+data:
+  # Expected number of samples per waveform in the training data.
+  waveform_length: 128
+  # Batch size used for training and validation.
+  batch_size: 64
+  # Number of worker processes for the PyTorch DataLoader.
+  num_workers: 0
+  # Random seed for reproducibility.
+  seed: 42
+  # Whether to normalize waveforms by global mean/std.
+  normalize: true
+
+# ---------------------------------------------------------------------------
+# Split section
+# ---------------------------------------------------------------------------
+split:
+  # Fraction of combined data for training (type1 + type2).
+  train_ratio: 0.8
+  # Fraction for validation.
+  val_ratio: 0.1
+  # Fraction for test.
+  test_ratio: 0.1
+
+# ---------------------------------------------------------------------------
+# Classifier model section
+# ---------------------------------------------------------------------------
+classifier:
+  # Waveform length expected by the model.
+  waveform_length: 128
+  # Number of output classes (2 = binary classification).
+  n_classes: 2
+  # Dropout probability applied inside the model.
+  dropout: 0.3
+
+  # Encoder architecture: list of output channels per conv block.
+  encoder_channels: [32, 64, 128, 256]
+
+  # Kernel sizes for each conv block.
+  kernel_sizes: [7, 5, 5, 3]
+
+  # Stride for each conv block.
+  strides: [2, 2, 2, 2]
+
+  # Padding for each conv block.
+  paddings: [3, 2, 2, 1]
+
+  # Activation function: relu, gelu, silu, elu.
+  activation: relu
+
+# ---------------------------------------------------------------------------
+# Training section
+# ---------------------------------------------------------------------------
+training:
+  # Number of epochs.
+  epochs: 50
+  # Adam learning rate.
+  learning_rate: 0.001
+  # Weight decay regularization for Adam.
+  weight_decay: 1e-4
+  # Device selection: auto, cpu, cuda, or mps.
+  device: auto
+  # Whether to display live matplotlib plots during notebook training.
+  live_plot: true
+  # Random seed for reproducibility.
+  seed: 42
+  # Save the best checkpoint during training.
+  save_best_model: true
+  # Path to save the trained classifier model.
+  save_path: outputs/cnn_classifier.pt
+
+# ---------------------------------------------------------------------------
+# Notebook section
+# ---------------------------------------------------------------------------
+notebook:
+  # Default mode for notebook execution.
+  run_mode: full
+
+# ---------------------------------------------------------------------------
+# Classifier training runs
+# ---------------------------------------------------------------------------
+# The classifier is trained once on both classes combined.
+classifier_runs:
+  - name: CNN_Classifier
+    type1_path: data/processed/Waveforms_type1_extended_128samples.txt
+    type2_path: data/processed/Waveforms_type2_extended_128samples.txt
+    output_dir: outputs
+
+# ---------------------------------------------------------------------------
+# Discriminator / Prediction section
+# ---------------------------------------------------------------------------
+# This file is not training data. It is the real waveform file to classify.
+discriminator:
+  # Measured waveform file to classify.
+  measured_path: data/measured/VLPs-2019_low-pass.dat
+  # Output directory for classification results.
+  output_dir: outputs/classifier_predictions
+  # Confidence threshold for classification.
+  confidence_threshold: 0.5
