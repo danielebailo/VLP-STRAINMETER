@@ -56,3 +56,5 @@ build/
 
 # --- OS ---
 Thumbs.db
+report/
+report_figures/
